@@ -1,20 +1,39 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function JournalEntry() {
+export default function JournalEntry({ mood, onSaved }) {
   const [entry, setEntry] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!entry.trim()) {
-      toast.error('🛑 Journal entry cannot be empty.');
+    if (!entry.trim() || !mood) {
+      toast.error('Please select a mood and write something.');
       return;
     }
 
-    // Simulate save success
-    toast.success('Journal saved!');
-    setEntry('');
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:4000/api/journals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: entry, mood }), // use mood from props
+      });
+
+      if (res.ok) {
+        toast.success('✅ Journal saved!');
+        setEntry('');
+        if (onSaved) onSaved();
+      } else {
+        const data = await res.json();
+        toast.error(data.message || '❌ Failed to save journal.');
+      }
+    } catch (err) {
+      toast.error('❌ Server error while saving journal.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -30,9 +49,10 @@ export default function JournalEntry() {
         />
         <button
           type="submit"
-          className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200"
+          disabled={loading}
+          className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200 disabled:opacity-50"
         >
-          Save Entry
+          {loading ? 'Saving...' : 'Save Entry'}
         </button>
       </form>
     </div>

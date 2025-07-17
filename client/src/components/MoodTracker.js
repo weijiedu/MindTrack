@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-export default function MoodTracker() {
-  const [mood, setMood] = useState('');
-
+export default function MoodTracker({ mood, setMood }) {
   return (
     <div>
       <h2 className="text-2xl font-semibold text-gray-700 mb-2">How are you feeling today?</h2>
