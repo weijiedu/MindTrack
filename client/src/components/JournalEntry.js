@@ -7,9 +7,8 @@ export default function JournalEntry({ mood, onSaved }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!entry.trim() || !mood) {
-      toast.error('Please select a mood and write something.');
+    if (!entry.trim()) {
+      toast.error('Journal entry cannot be empty.');
       return;
     }
 
@@ -18,19 +17,21 @@ export default function JournalEntry({ mood, onSaved }) {
       const res = await fetch('http://localhost:4000/api/journals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: entry, mood }), // use mood from props
+        body: JSON.stringify({ text: entry, mood }),
       });
 
-      if (res.ok) {
-        toast.success('✅ Journal saved!');
-        setEntry('');
-        if (onSaved) onSaved();
-      } else {
+      if (!res.ok) {
         const data = await res.json();
-        toast.error(data.message || '❌ Failed to save journal.');
+        toast.error(data.message || 'Failed to save journal.');
+        return;
       }
+
+      toast.success('✅ Journal saved!');
+      const savedText = entry; // Store the text before clearing
+      setEntry('');
+      if (onSaved) onSaved(savedText); // Pass the saved text
     } catch (err) {
-      toast.error('❌ Server error while saving journal.');
+      toast.error('Error saving journal.');
     } finally {
       setLoading(false);
     }
