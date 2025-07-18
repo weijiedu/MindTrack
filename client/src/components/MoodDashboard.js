@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import {
   LineChart,
   Line,
@@ -16,21 +18,35 @@ import {
 } from 'recharts';
 
 export default function MoodDashboard() {
+  const { fetchWithAuth } = useAuth();
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [timeRange, setTimeRange] = useState('week'); // week, month, all
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchEntries();
+    // eslint-disable-next-line
   }, []);
 
   const fetchEntries = async () => {
     try {
-      const response = await fetch('https://mental-health-app-3xur.onrender.com/api/journals');
+      const response = await fetchWithAuth('https://mental-health-app-3xur.onrender.com/api/journals');
+      if (response.status === 401) {
+        navigate('/signin');
+        return;
+      }
       const data = await response.json();
+      if (!Array.isArray(data)) {
+        setError('Failed to load your journal data. Please sign in again.');
+        setEntries([]);
+        return;
+      }
       setEntries(data);
     } catch (error) {
-      console.error('Failed to fetch entries:', error);
+      setError('Failed to fetch entries.');
+      setEntries([]);
     } finally {
       setLoading(false);
     }
@@ -178,6 +194,12 @@ export default function MoodDashboard() {
         <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <p className="mt-4 text-gray-600">Loading your mood data...</p>
       </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12 text-red-600 font-medium">{error}</div>
     );
   }
 
