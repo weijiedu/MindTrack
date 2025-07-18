@@ -1,21 +1,38 @@
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function JournalPage() {
+  const { fetchWithAuth, user, loading: authLoading } = useAuth();
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://mental-health-app-3xur.onrender.com/api/journals')
-      .then((res) => res.json())
-      .then((data) => {
-        setEntries(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-        alert('Failed to load journal entries');
-      });
-  }, []);
+    if (authLoading) return;
+    if (!user) {
+      navigate('/signin');
+      return;
+    }
+    fetchEntries();
+    // eslint-disable-next-line
+  }, [user, authLoading]);
+
+  const fetchEntries = async () => {
+    try {
+      const response = await fetchWithAuth('https://mental-health-app-3xur.onrender.com/api/journals');
+      if (response.status === 401) {
+        navigate('/signin');
+        return;
+      }
+      const data = await response.json();
+      setEntries(data);
+    } catch (error) {
+      console.error('Failed to fetch entries:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 export default function JournalEntry({ mood, onSaved }) {
+  const { fetchWithAuth, user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [entry, setEntry] = useState('');
   const [loading, setLoading] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
@@ -56,22 +60,27 @@ export default function JournalEntry({ mood, onSaved }) {
       toast.error('Journal entry cannot be empty.');
       return;
     }
-
+    if (!user) {
+      navigate('/signin');
+      return;
+    }
     setLoading(true);
     try {
-      const res = await fetch('https://mental-health-app-3xur.onrender.com/api/journals', {
+      const res = await fetchWithAuth('https://mental-health-app-3xur.onrender.com/api/journals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: entry, mood }),
       });
-
+      if (res.status === 401) {
+        navigate('/signin');
+        return;
+      }
       if (!res.ok) {
         const data = await res.json();
         toast.error(data.message || 'Failed to save journal.');
         return;
       }
-
-      toast.success('✅ Journal saved!');
+      toast.success('Journal saved!');
       const savedText = entry; // Store the text before clearing
       setEntry('');
       setSuggestedMood(null);

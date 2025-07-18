@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import MoodTracker from '../components/MoodTracker';
 import JournalEntry from '../components/JournalEntry';
 import QuoteOfTheDay from '../components/QuoteOfTheDay';
 
 export default function Home() {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
   const [mood, setMood] = useState('');
   const [journalText, setJournalText] = useState('');
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [savedMood, setSavedMood] = useState(''); // Store mood for quote generation
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/signin');
+    }
+    // eslint-disable-next-line
+  }, [user, loading]);
 
   // Add a handler to reset mood and trigger quote refresh
   const handleJournalSaved = (savedText) => {

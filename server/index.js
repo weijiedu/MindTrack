@@ -5,11 +5,33 @@ import dotenv from 'dotenv';
 import journalRoutes from './routes/journalRoutes.js';
 import fetch from 'node-fetch';
 import gptRoutes from './routes/gpt.js';
+import authRoutes from './routes/auth.js';
 
 dotenv.config();
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://mindtracker25.netlify.app'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
+
+// Explicitly handle preflight OPTIONS requests for all routes
+// app.options('*', cors({
+//   origin: [
+//     'http://localhost:3000',
+//     'https://mindtracker25.netlify.app'
+//   ],
+//   credentials: true,
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+//   allowedHeaders: ['Content-Type', 'Authorization']
+// }));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
@@ -17,6 +39,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.use('/api/journals', journalRoutes);
 app.use('/api/gpt', gptRoutes);
+app.use('/api/auth', authRoutes);
 
 // Proxy endpoint for quote of the day
 app.get('/api/quote', async (req, res) => {
