@@ -4,7 +4,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Home from './pages/Home';
-import JournalPage from './pages/JournalPage'; // ✅ add this
+import JournalPage from './pages/JournalPage';
+import DashboardPage from './pages/DashboardPage';
 import Navbar from './components/Navbar';
 
 function App() {
@@ -15,7 +16,8 @@ function App() {
         <div className="py-10 px-4">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/journal" element={<JournalPage />} /> {/* ✅ new route */}
+            <Route path="/journal" element={<JournalPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
           </Routes>
         </div>
         <ToastContainer

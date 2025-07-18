@@ -11,6 +11,9 @@ export default function Navbar() {
             <Link to="/" className="text-gray-600 hover:text-blue-700 transition font-medium">
               Home
             </Link>
+            <Link to="/dashboard" className="text-gray-600 hover:text-blue-700 transition font-medium">
+              Dashboard
+            </Link>
             <Link to="/journal" className="text-gray-600 hover:text-blue-700 transition font-medium">
               Journal
             </Link>

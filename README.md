@@ -27,6 +27,8 @@ A modern, AI-powered mental health journaling application that helps users track
 - **Context-Aware**: Quotes are generated based on your specific mood and journal content
 - **Manual Refresh**: Generate new quotes anytime with the "New Quote" button
 - **Persistent Storage**: Quotes are saved locally and persist between sessions
+- **AI Sentiment Analysis**: Automatically analyzes journal text and suggests mood if not selected
+- **Smart Mood Detection**: Uses advanced NLP to understand emotional tone and context
 
 ## 🛠️ Technology Stack
 
@@ -129,6 +131,7 @@ A modern, AI-powered mental health journaling application that helps users track
 
 ### AI Quotes
 - `POST /api/gpt/quote` - Generate a personalized quote based on mood and text
+- `POST /api/gpt/sentiment` - Analyze journal text and suggest mood using AI
 
 ## 🎨 Design System
 
