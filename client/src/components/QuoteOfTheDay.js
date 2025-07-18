@@ -26,7 +26,7 @@ export default function QuoteOfTheDay({ mood, journalText, refreshTrigger }) {
     setLoading(true);
     setIsAnimating(true);
     try {
-      const res = await fetch('http://localhost:4000/api/gpt/quote', {
+      const res = await fetch('https://mental-health-app-3xur.onrender.com/api/gpt/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mood, text: journalText }),

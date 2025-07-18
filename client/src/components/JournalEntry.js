@@ -14,7 +14,7 @@ export default function JournalEntry({ mood, onSaved }) {
 
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:4000/api/journals', {
+      const res = await fetch('https://mental-health-app-3xur.onrender.com/api/journals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: entry, mood }),

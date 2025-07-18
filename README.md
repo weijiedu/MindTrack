@@ -2,6 +2,10 @@
 
 A modern, AI-powered mental health journaling application that helps users track their mood, reflect on their day, and receive personalized insights to support their mental well-being.
 
+## 🌐 Live Demo
+
+**Try the app live:** [https://mindtracker25.netlify.app/](https://mindtracker25.netlify.app/)
+
 ## ✨ Features
 
 ### 🎯 Core Functionality
@@ -97,7 +101,7 @@ A modern, AI-powered mental health journaling application that helps users track
 
 5. **Access the application**
    - Frontend: http://localhost:3000
-   - Backend API: http://localhost:4000
+   - Backend API: https://mental-health-app-3xur.onrender.com
 
 ## 📱 Usage
 
@@ -117,7 +121,7 @@ A modern, AI-powered mental health journaling application that helps users track
 - Click "New Quote" to generate a different quote using your last saved entry
 - Quotes are personalized based on your mood and journal content
 
-## 🔧 API Endpoints
+## 🎨 API Endpoints
 
 ### Journal Entries
 - `GET /api/journals` - Retrieve all journal entries
@@ -154,10 +158,12 @@ A modern, AI-powered mental health journaling application that helps users track
 ## 🚀 Deployment
 
 ### Frontend (Client)
+- **Live Demo**: [https://mindtracker25.netlify.app/](https://mindtracker25.netlify.app/)
 - Build the production version: `npm run build`
 - Deploy to platforms like Vercel, Netlify, or GitHub Pages
 
 ### Backend (Server)
+- **Live API**: https://mental-health-app-3xur.onrender.com
 - Set up environment variables on your hosting platform
 - Deploy to platforms like Heroku, Railway, or DigitalOcean
 - Ensure MongoDB connection is properly configured

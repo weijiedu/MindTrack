@@ -5,7 +5,7 @@ export default function JournalPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/journals')
+    fetch('https://mental-health-app-3xur.onrender.com/api/journals')
       .then((res) => res.json())
       .then((data) => {
         setEntries(data);
